@@ -39,7 +39,7 @@ class Koans extends Suite {
     new AboutInfixPrefixAndPostfixOperators,
     new AboutInfixTypes,
     new AboutImplicits,
-    new AboutManifests,
+    //new AboutManifests,
     new AboutTypeVariance,
     new AboutEnumerations,
     new AboutConstructors

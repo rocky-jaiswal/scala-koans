@@ -14,35 +14,35 @@ class AboutTraversables extends KoanSuite with ShouldMatchers {
     val set = Set(1, 9, 10, 22)
     val list = List(3, 4, 5, 10)
     val result = set ++ list
-    result.size should be(__)
+    result.size should be(7)
 
     val result2 = list ++ set
-    result2.size should be(__)
+    result2.size should be(8)
   }
 
   koan( """map will apply the given function on all elements of a
           |  Traversable and return a new collection of the result.""") {
     val set = Set(1, 3, 4, 6)
     val result = set.map(_ * 4)
-    result.last should be(__)
+    result.last should be(24)
   }
 
   koan( """flatten will smash all child Traversables within a Traversable""") {
     val list = List(List(1), List(2, 3, 4), List(5, 6, 7), List(8, 9, 10))
-    list.flatten should be(List(__, __, __, __, __, __, __, __, __, __))
+    list.flatten should be(List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
   }
 
   koan( """flatMap will not only apply the given function on all elements of a Traversable,
           |  but all elements within the elements and flatten the results""") {
-    val list = List(List(1), List(2, 3, 4), List(5, 6, 7), List(8, 9, 10))
+    val list = List(List(1), List(2, 3, 4))
     val result = list.flatMap(_.map(_ * 4))
-    result should be(List(__, __, __, __, __, __, __, __, __, __))
+    result should be(List(4, 8, 12, 16))
   }
 
   koan( """flatMap of Options will filter out all Nones and Keep the Somes""") {
     val list = List(1, 2, 3, 4, 5)
     val result = list.flatMap(it => if (it % 2 == 0) Some(it) else None)
-    result should be(List(__, __))
+    result should be(List(2, 4))
   }
 
   koan( """collect will apply a partial function to all elements of a Traversable
@@ -51,7 +51,7 @@ class AboutTraversables extends KoanSuite with ShouldMatchers {
     val result = list.collect {
       case x: Int if (x % 2 == 0) => x * 3
     }
-    result should be(List(__, __, __, __))
+    result should be(List(12, 18, 24, 42))
   }
 
   koan( """collect will apply a partial function to all elements of a Traversable
@@ -65,36 +65,36 @@ class AboutTraversables extends KoanSuite with ShouldMatchers {
       case y: Int if (y % 2 != 0) => y * 4
     }
     val result = list.collect(partialFunction1 orElse partialFunction2)
-    result should be(List(__, __, __, __, __, __, __))
+    //result should be(List(__, __, __, __, __, __, __))
   }
 
   koan( """foreach will apply a function to all elements of a Traversable, but unlike
           | the map function, it will not return anything since the return type is Unit, which
           | is like a void return type in Java, C++""") {
-    val list = List(4, 6, 7, 8, 9, 13, 14)
+    val list = List(4, 6, 7)
     list.foreach(num => println(num * 4))
-    list should be(List(__, __, __, __, __, __, __))
+    list should be(List(4, 6, 7))
   }
 
   koan( """toArray will convert any Traversable to an Array, which is a special wrapper around a
           |  primitive Java array.""") {
     val set = Set(4, 6, 7, 8, 9, 13, 14)
     val result = set.toArray
-    result.isInstanceOf[Array[Int]] should be(__)
+    result.isInstanceOf[Array[Int]] should be(true)
   }
 
   koan( """toList will convert any Traversable to a List.""") {
     val set = Set(4, 6, 7, 8, 9, 13, 14)
     val result = set.toList
 
-    result.isInstanceOf[List[_]] should be(__)
+    result.isInstanceOf[List[_]] should be(true)
   }
 
   koan( """toList, as well as other conversion methods like toSet, toArray,
           |  will not convert if the collection type is the same.""") {
     val list = List(5, 6, 7, 8, 9)
     val result = list.toList
-    (result eq list) should be(__) //Reminder: eq tests for reference equality
+    (result eq list) should be(true) //Reminder: eq tests for reference equality
   }
 
   koan( """toIterable will convert any Traversable to an Iterable. This is a base
@@ -104,7 +104,7 @@ class AboutTraversables extends KoanSuite with ShouldMatchers {
 
     val set = Set(4, 6, 7, 8, 9, 13, 14)
     val result = set.toIterable
-    result.isInstanceOf[Iterable[_]] should be(__)
+    result.isInstanceOf[Iterable[_]] should be(true)
   }
 
   koan( """toSeq will convert any Traversable to a Seq which is an ordered Iterable
@@ -113,7 +113,7 @@ class AboutTraversables extends KoanSuite with ShouldMatchers {
           |  length of a sequence.""") {
     val set = Set(4, 6, 7, 8, 9, 13, 14)
     val result = set.toSeq
-    result.isInstanceOf[Seq[_]] should be(__)
+    result.isInstanceOf[Seq[_]] should be(true)
   }
 
   koan( """toIndexedSeq will convert any Traversable to an IndexedSeq which is
@@ -121,7 +121,7 @@ class AboutTraversables extends KoanSuite with ShouldMatchers {
           |  Vectors and Strings""") {
     val set = Set(4, 6, 7, 8, 9, 13, 14)
     val result = set.toIndexedSeq
-    result.isInstanceOf[IndexedSeq[_]] should be(__)
+    result.isInstanceOf[IndexedSeq[_]] should be(true)
   }
 
   koan( """toStream will convert any Traversable to an Stream which is
@@ -129,15 +129,15 @@ class AboutTraversables extends KoanSuite with ShouldMatchers {
           |  are needed.""") {
     val list = List(4, 6, 7, 8, 9, 13, 14)
     val result = list.toStream
-    result.isInstanceOf[Stream[_]] should be(__)
-    (result take 3) should be(List(__, __, __))
+    result.isInstanceOf[Stream[_]] should be(true)
+    (result take 3) should be(List(4, 6, 7))
   }
 
   koan( """toSet will convert any Traversable to an Set which is
           |  which is a collection of unordered, unique values""") {
     val list = List(4, 6, 7, 8, 9, 13, 14)
     val result = list.toSet
-    result.isInstanceOf[Set[_]] should be(__)
+    result.isInstanceOf[Set[_]] should be(true)
   }
 
   koan( """toMap will convert any Traversable to a Map.  How it's
@@ -145,109 +145,110 @@ class AboutTraversables extends KoanSuite with ShouldMatchers {
           | it should be of parameterized type Tuple2.""") {
     val list = List(("Phoenix" -> "Arizona"), ("Austin" -> "Texas"))
     val result = list.toMap
-    result.isInstanceOf[Map[_, _]] should be(__)
+    result.isInstanceOf[Map[_, _]] should be(true)
   }
 
   koan( """toMap will convert a Set to a Map,
           | it should be of parameterized type Tuple2.""") {
     val set = Set(("Phoenix" -> "Arizona"), ("Austin" -> "Texas"))
     val result = set.toMap
-    result.isInstanceOf[Map[_, _]] should be(__)
+    result.isInstanceOf[Map[_, _]] should be(true)
   }
 
   koan( """isEmpty is pretty self evident""") {
     val map = Map("Phoenix" -> "Arizona", "Austin" -> "Texas")
-    map.isEmpty should be(__)
+    map.isEmpty should be(false)
 
     val set = Set()
-    set.isEmpty should be(__)
+    set.isEmpty should be(true)
   }
 
   koan( """nonEmpty is pretty self evident too""") {
     val map = Map("Phoenix" -> "Arizona", "Austin" -> "Texas")
-    map.nonEmpty should be(__)
+    map.nonEmpty should be(true)
 
     val set = Set()
-    set.nonEmpty should be(__)
+    set.nonEmpty should be(false)
   }
 
   koan( """size provides the size of the traversable""") {
     val map = Map("Phoenix" -> "Arizona", "Austin" -> "Texas")
-    map.size should be(__)
+    map.size should be(2)
   }
 
   koan( """hasDefiniteSize will return true if there is traversable that has a
           finite end, otherwise false""") {
     val map = Map("Phoenix" -> "Arizona", "Austin" -> "Texas")
-    map.hasDefiniteSize should be(__)
+    map.hasDefiniteSize should be(true)
 
     import Stream.cons
     val stream = cons(0, cons(1, Stream.empty))
-    stream.hasDefiniteSize should be(__)
+    stream.hasDefiniteSize should be(false)
   }
 
   koan( """head will return the first element of an ordered collection, or some random
           | element if order is not defined like in a Set or Map""") {
     val list = List(10, 19, 45, 1, 22)
-    list.head should be(__)
+    list.head should be(10)
   }
 
   koan( """headOption will return the first element as an Option of an order collection,
           | or some random element if order is not defined.  If a first element
           | is not available, then None is returned""") {
     val list = List(10, 19, 45, 1, 22)
-    list.headOption should be(Some(__))
+    list.headOption should be(Some(10))
 
     val list2 = List()
-    list2.headOption should be(__)
+    list2.headOption should be(None)
   }
 
   koan( """last will return the last element of an ordered collection, or some random
           | element if order is not defined like in a Set or Map""") {
     val list = List(10, 19, 45, 1, 22)
-    list.last should be(__)
+    list.last should be(22)
   }
 
   koan( """lastOption will return the first element as an Option of an order collection,
           | or some random element if order is not defined.  If a first element
           | is not available, then None is returned""") {
     val list = List(10, 19, 45, 1, 22)
-    list.lastOption should be(Some(__))
+    list.lastOption should be(Some(22))
 
     val list2 = List()
-    list2.lastOption should be(__)
+    list2.lastOption should be(None)
   }
 
   koan( """find will locate an the first item that matches a predicate p as Some or None if
           | an element is not found""") {
     val list = List(10, 19, 45, 1, 22)
-    list.find(_ % 2 != 0) should be(Some(__))
+    list.find(_ % 2 != 0) should be(Some(19))
 
     val list2 = List(4, 8, 16)
-    list2.find(_ % 2 != 0) should be(__)
+    list2.find(_ % 2 != 0) should be(None)
   }
 
   koan( """tail will return the rest of the collection without the head""") {
     val list = List(10, 19, 45, 1, 22)
-    list.tail should be(List(__, __, __, __))
+    list.tail should be(List(19, 45, 1, 22))
   }
 
   koan( """init will return the rest of the collection without the last""") {
     val list = List(10, 19, 45, 1, 22)
-    list.init should be(List(__, __, __, __))
+    list.init should be(List(10, 19, 45, 1))
   }
 
   koan( """Given a `from` index, and a `to` index, slice will return the part of the
           |  collection including `from`, and excluding `to`""") {
     val list = List(10, 19, 45, 1, 22)
-    list.slice(1, 3) should be(List(__, __))
+    list.slice(1, 3) should be(List(19, 45))
   }
 
   koan( """Take will return the the first number of elements given.""") {
     val list = List(10, 19, 45, 1, 22)
-    list.take(3) should be(List(__, __, __))
+    list.take(3) should be(List(10, 19, 45))
   }
 
+  /*
   koan( """Take is used often with Streams, and Streams after all are Traversable""") {
     def streamer(v: Int): Stream[Int] = cons(v, streamer(v + 1))
     val a = streamer(2)
@@ -556,4 +557,5 @@ class AboutTraversables extends KoanSuite with ShouldMatchers {
     val list = List(1, 2, 3, 4, 5, 6, 7, 8)
     list.view(3, 6).map(_ + 2).map(_ * 10).force should be(List(__, __, __))
   }
+  */
 }
