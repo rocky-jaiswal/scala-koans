@@ -14,8 +14,8 @@ class AboutPreconditions extends KoanSuite {
 
   // Instruction: use Intercept to catch the type of exception thrown by an invalid precondition
   koan("On precondition violation, intercept expects type of exception thrown") {
-    intercept[___] {
-      val myInstance = new WithParameterRequirement("")
+    intercept[java.lang.IllegalArgumentException] {
+      val myInstance = new WithParameterRequirement(0)
     }
   }
 }
